@@ -1,12 +1,14 @@
-var CARRYER_COUNT = 5
-var BUILDER_COUNT = 1
+var CARRYER_COUNT = 3
+var BUILDER_COUNT = 3
 var REPAIRER_COUNT = 1
 var EXCAVATOR_COUNT = 2
+var UPDATER_COUNT = 2
 
 var CARRYER_BODY = [WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE]
 var BUILDER_BODY = [WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE]
 var REPAIRER_BODY = [MOVE,MOVE,MOVE,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
 var EXCAVATOR_BODY = [MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+var UPDATER_BODY = [MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
 
 // MOVE - 50, WORK - 100, CARRY - 50
 //var CARRYER_BODY = [MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
@@ -36,14 +38,14 @@ var day_X = function(Game){
 
 var main = {
     run: function(Game){
-        for (let i = 0; i < REPAIRER_COUNT; i++){
-            if (!Game.creeps["repairer"+i]){
-                if (queue.find(item => item == "repairer"+i) == undefined){
+        for (let i = 0; i < UPDATER_COUNT; i++){
+            if (!Game.creeps["updater"+i]){
+                if (queue.find(item => item == "updater"+i) == undefined){
                     var obj = {
-                        name: "repairer"+i,
-                        body: REPAIRER_BODY,
+                        name: "updater"+i,
+                        body: UPDATER_BODY,
                         memory: {
-                            role: "repairer",
+                            role: "updater",
                             task: "fill_bag"
                         }
                     }
@@ -67,6 +69,23 @@ var main = {
                 }
             }
         }
+        
+        for (let i = 0; i < REPAIRER_COUNT; i++){
+            if (!Game.creeps["repairer"+i]){
+                if (queue.find(item => item == "repairer"+i) == undefined){
+                    var obj = {
+                        name: "repairer"+i,
+                        body: REPAIRER_BODY,
+                        memory: {
+                            role: "repairer",
+                            task: "fill_bag"
+                        }
+                    }
+                    queue.push(obj);
+                }
+            }
+        }
+        
 
         for (let i = 0; i < EXCAVATOR_COUNT; i++){
             if (!Game.creeps["excavator"+i]){

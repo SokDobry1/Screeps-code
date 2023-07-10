@@ -3,8 +3,8 @@ const { carryer } = require("./work_list");
 
 const BUILDER_TO_CARRYER = true;
 
-const ROLES_WITH_BAG = ["carryer", "builder", "repairer"]
-const ALLOWED_FILL_CONSTRUCTIONS_CARRYER = ["spawn", "extension"]
+const ROLES_WITH_BAG = ["carryer", "builder", "repairer", "updater"]
+const ALLOWED_FILL_CONSTRUCTIONS_CARRYER = ["spawn", "extension", "storage"]
 const ALLOWED_FILL_CONSTRUCTIONS_REPAIRER = ["tower"]
 const DISALLOWED_REPAIR_CONSTRUCTIONS = ["constructedWall", "rampart"]
 
@@ -87,6 +87,10 @@ var main = {
 
                     case 'excavator':                           
                         creep.memory.task = "transport"
+                        break;
+
+                    case 'updater':                           
+                        creep.memory.task = "charge_controller"
                         break;
                 }
             }

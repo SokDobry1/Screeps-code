@@ -5,7 +5,6 @@ var DISALLOWED_REPAIR_CONSTRUCTIONS = ["constructedWall", "rampart"]
 var fill_bag = function(creep){
     const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                       i.storeCapacity == 2000 &&
                        i.store[RESOURCE_ENERGY] >= creep.carryCapacity  });      
     
     if (container != undefined){
@@ -59,7 +58,7 @@ var work = {
 
             if (!resource) resource = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
 
-            if (resource){
+            if (resource && creep.carry.energy < creep.carryCapacity){
                 if (creep.pickup(resource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                     creep.moveTo(resource)
             } else {
@@ -157,7 +156,6 @@ var work = {
         transport: function(creep){
             const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                               i.storeCapacity == 2000 &&
                                i.store[RESOURCE_ENERGY] < i.storeCapacity  });
 
             if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
@@ -166,6 +164,29 @@ var work = {
                 creep.memory.task = "none"
             }
         }
+    },
+
+    updater: {
+        fill_bag: function(creep){
+            const storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (i) => i.structureType == STRUCTURE_STORAGE});      
+            
+            if (storage != undefined){
+                if (storage.store[RESOURCE_ENERGY] > 0){
+                    if (creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                        creep.moveTo(storage)
+                    } else {
+                        creep.memory.task = "none"
+                    }
+                }
+            }
+        },
+
+        charge_controller: function(creep){
+            var controller = creep.room.controller
+            creep.upgradeController(controller)
+            creep.moveTo(controller);
+        },
     }
 }
 
