@@ -19,6 +19,16 @@ var main = {
             if (creep.memory.task == "none"){
                 switch(role) {
                     case 'carryer':
+                        let unfilled_tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                            filter: s => s.structureType == "tower" &&
+                                    s.energy == 0})
+
+                        if (unfilled_tower){
+                            creep.memory.task = "fill";
+                            creep.memory.target = unfilled_towe
+                            break;
+                        }
+
                         let unfilled_struct = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                             filter: s => ALLOWED_FILL_CONSTRUCTIONS_CARRYER.find(f => f == s.structureType) &&
                                     s.energy < s.energyCapacity})
