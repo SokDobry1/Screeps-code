@@ -4,11 +4,9 @@ const { carryer } = require("./work_list");
 const BUILDER_TO_CARRYER = true;
 
 const ROLES_WITH_BAG = ["carryer", "builder", "repairer", "updater"]
-const ALLOWED_FILL_CONSTRUCTIONS_CARRYER = ["spawn", "extension", "storage"]
+const ALLOWED_FILL_CONSTRUCTIONS_CARRYER = ["spawn", "extension"]
 const ALLOWED_FILL_CONSTRUCTIONS_REPAIRER = ["tower"]
 const DISALLOWED_REPAIR_CONSTRUCTIONS = ["constructedWall", "rampart"]
-
-var resource_keeper = false;
 
 
 var main = {
@@ -26,6 +24,16 @@ var main = {
                         if (unfilled_struct){
                             creep.memory.task = "fill";
                             creep.memory.target = unfilled_struct
+                            break;
+                        }
+
+                        let unfilled_storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                            filter: s => s.structureType == "storage" &&
+                                    s.store[RESOURCE_ENERGY] < s.storeCapacity})
+
+                        if (unfilled_storage){
+                            creep.memory.task = "fill_storage";
+                            creep.memory.target = unfilled_storage
                             break;
                         }
 

@@ -47,6 +47,21 @@ var work = {
             }
         },
 
+        fill_storage: function(creep){
+            var storage = creep.memory.target
+
+            if (!storage) storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                        filter: s => s.structureType == "storage" &&
+                        s.store[RESOURCE_ENERGY] < s.storeCapacity})
+
+            if (storage){
+                if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                    creep.moveTo(storage)
+            } else {
+                creep.memory.task = "none"
+            }
+        },
+
         charge_controller: function(creep){
             var controller = creep.room.controller
             creep.upgradeController(controller)
@@ -169,7 +184,7 @@ var work = {
     updater: {
         fill_bag: function(creep){
             const storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_STORAGE});      
+                filter: (i) => i.structureType == "storage"});      
             
             if (storage != undefined){
                 if (storage.store[RESOURCE_ENERGY] > 0){
