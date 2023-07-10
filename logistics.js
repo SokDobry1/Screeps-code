@@ -110,6 +110,8 @@ var main = {
                     if (dropped_resource.amount >= 100){
                         creep.memory.task = "pickup"
                         creep.memory.target = dropped_resource
+                    } else {
+                        creep.memory.task = "fill_bag";
                     }
                 }else{
                     creep.memory.task = "fill_bag";
@@ -119,7 +121,7 @@ var main = {
             if (creep.carry.energy == 0 && role == "excavator") 
                 creep.memory.task = "dig";
             
-                if (role) {
+            if (role) {
                 works[role][creep.memory.task](creep);
                 creep.memory.target = undefined
             }
