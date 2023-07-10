@@ -25,7 +25,7 @@ var main = {
 
                         if (unfilled_tower){
                             creep.memory.task = "fill";
-                            creep.memory.target = unfilled_towe
+                            creep.memory.target = unfilled_tower
                             break;
                         }
 
