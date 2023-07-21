@@ -3,12 +3,10 @@ const { carryer } = require("./work_list");
 
 const BUILDER_TO_CARRYER = true;
 
-const ROLES_WITH_BAG = ["carryer", "builder", "repairer"]
+const ROLES_WITH_BAG = ["carryer", "builder", "repairer", "updater"]
 const ALLOWED_FILL_CONSTRUCTIONS_CARRYER = ["spawn", "extension"]
 const ALLOWED_FILL_CONSTRUCTIONS_REPAIRER = ["tower"]
 const DISALLOWED_REPAIR_CONSTRUCTIONS = ["constructedWall", "rampart"]
-
-var resource_keeper = false;
 
 
 var main = {
@@ -36,6 +34,16 @@ var main = {
                         if (unfilled_struct){
                             creep.memory.task = "fill";
                             creep.memory.target = unfilled_struct
+                            break;
+                        }
+
+                        let unfilled_storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                            filter: s => s.structureType == "storage" &&
+                                    s.store[RESOURCE_ENERGY] < s.storeCapacity})
+
+                        if (unfilled_storage){
+                            creep.memory.task = "fill_storage";
+                            creep.memory.target = unfilled_storage
                             break;
                         }
 
@@ -98,6 +106,10 @@ var main = {
                     case 'excavator':                           
                         creep.memory.task = "transport"
                         break;
+
+                    case 'updater':                           
+                        creep.memory.task = "charge_controller"
+                        break;
                 }
             }
                 
@@ -108,6 +120,8 @@ var main = {
                     if (dropped_resource.amount >= 100){
                         creep.memory.task = "pickup"
                         creep.memory.target = dropped_resource
+                    } else {
+                        creep.memory.task = "fill_bag";
                     }
                 }else{
                     creep.memory.task = "fill_bag";
@@ -117,7 +131,7 @@ var main = {
             if (creep.carry.energy == 0 && role == "excavator") 
                 creep.memory.task = "dig";
             
-                if (role) {
+            if (role) {
                 works[role][creep.memory.task](creep);
                 creep.memory.target = undefined
             }
